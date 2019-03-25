@@ -1,3 +1,5 @@
+# coding: utf8
+
 from flask import Flask, session, redirect, render_template, flash, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import UsersModel, CarsModel, DealersModel
@@ -16,46 +18,46 @@ DealersModel(db.get_connection()).init_table()
 @app.route('/index')
 def index():
     """
-    Главная страница
+    Р“Р»Р°РІРЅР°СЏ СЃС‚СЂР°РЅРёС†Р°
     :return:
-    Основная страница сайта, либо редирект на авторизацю
+    РћСЃРЅРѕРІРЅР°СЏ СЃС‚СЂР°РЅРёС†Р° СЃР°Р№С‚Р°, Р»РёР±Рѕ СЂРµРґРёСЂРµРєС‚ РЅР° Р°РІС‚РѕСЂРёР·Р°С†СЋ
     """
-    # если пользователь не авторизован, кидаем его на страницу входа
+    # РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, РєРёРґР°РµРј РµРіРѕ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РІС…РѕРґР°
     if 'username' not in session:
         return redirect('/login')
-    # если админ, то его на свою страницу
+    # РµСЃР»Рё Р°РґРјРёРЅ, С‚Рѕ РµРіРѕ РЅР° СЃРІРѕСЋ СЃС‚СЂР°РЅРёС†Сѓ
     if session['username'] == 'admin':
         return render_template('index_admin.html', username=session['username'])
-    # если обычный пользователь, то его на свою
+    # РµСЃР»Рё РѕР±С‹С‡РЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ, С‚Рѕ РµРіРѕ РЅР° СЃРІРѕСЋ
     cars = CarsModel(db.get_connection()).get_all()
-    return render_template('car_user.html', username=session['username'], title='Просмотр базы', cars=cars)
+    return render_template('car_user.html', username=session['username'], title='РџСЂРѕСЃРјРѕС‚СЂ Р±Р°Р·С‹', cars=cars)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """
-    Страница авторизации
+    РЎС‚СЂР°РЅРёС†Р° Р°РІС‚РѕСЂРёР·Р°С†РёРё
     :return:
-    переадресация на главную, либо вывод формы авторизации
+    РїРµСЂРµР°РґСЂРµСЃР°С†РёСЏ РЅР° РіР»Р°РІРЅСѓСЋ, Р»РёР±Рѕ РІС‹РІРѕРґ С„РѕСЂРјС‹ Р°РІС‚РѕСЂРёР·Р°С†РёРё
     """
     form = LoginForm()
-    if form.validate_on_submit():  # ввели логин и пароль
+    if form.validate_on_submit():  # РІРІРµР»Рё Р»РѕРіРёРЅ Рё РїР°СЂРѕР»СЊ
         user_name = form.username.data
         password = form.password.data
         user_model = UsersModel(db.get_connection())
-        # проверяем наличие пользователя в БД и совпадение пароля
+        # РїСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РІ Р‘Р” Рё СЃРѕРІРїР°РґРµРЅРёРµ РїР°СЂРѕР»СЏ
         if user_model.exists(user_name)[0] and check_password_hash(user_model.exists(user_name)[1], password):
-            session['username'] = user_name  # запоминаем в сессии имя пользователя и кидаем на главную
+            session['username'] = user_name  # Р·Р°РїРѕРјРёРЅР°РµРј РІ СЃРµСЃСЃРёРё РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Рё РєРёРґР°РµРј РЅР° РіР»Р°РІРЅСѓСЋ
             return redirect('/index')
         else:
-            flash('Пользователь или пароль не верны')
-    return render_template('login.html', title='Авторизация', form=form)
+            flash('РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РёР»Рё РїР°СЂРѕР»СЊ РЅРµ РІРµСЂРЅС‹')
+    return render_template('login.html', title='РђРІС‚РѕСЂРёР·Р°С†РёСЏ', form=form)
 
 
 @app.route('/logout')
 def logout():
     """
-    Выход из системы
+    Р’С‹С…РѕРґ РёР· СЃРёСЃС‚РµРјС‹
     :return:
     """
     session.pop('username', 0)
@@ -65,93 +67,93 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
-    Форма регистрации
+    Р¤РѕСЂРјР° СЂРµРіРёСЃС‚СЂР°С†РёРё
     """
     form = RegisterForm()
     if form.validate_on_submit():
-        # создать пользователя
+        # СЃРѕР·РґР°С‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
         users = UsersModel(db.get_connection())
         if form.user_name.data in [u[1] for u in users.get_all()]:
-            flash('Такой пользователь уже существует')
+            flash('РўР°РєРѕР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚')
         else:
             users.insert(user_name=form.user_name.data, email=form.email.data,
                          password_hash=generate_password_hash(form.password_hash.data))
-            # редирект на главную страницу
+            # СЂРµРґРёСЂРµРєС‚ РЅР° РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
             return redirect(url_for('index'))
-    return render_template("register.html", title='Регистрация пользователя', form=form)
+    return render_template("register.html", title='Р РµРіРёСЃС‚СЂР°С†РёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ', form=form)
 
 
-"""Работа с автомобилями"""
+"""Р Р°Р±РѕС‚Р° СЃ Р°РІС‚РѕРјРѕР±РёР»СЏРјРё"""
 
 
 @app.route('/car_admin', methods=['GET'])
 def car_admin():
     """
-    Вывод всей информации об всех автомобилях
+    Р’С‹РІРѕРґ РІСЃРµР№ РёРЅС„РѕСЂРјР°С†РёРё РѕР± РІСЃРµС… Р°РІС‚РѕРјРѕР±РёР»СЏС…
     :return:
-    информация для авторизованного пользователя
+    РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     """
-    # если пользователь не авторизован, кидаем его на страницу входа
+    # РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, РєРёРґР°РµРј РµРіРѕ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РІС…РѕРґР°
     if 'username' not in session:
         return redirect('/login')
-    # если админ, то его на свою страницу
+    # РµСЃР»Рё Р°РґРјРёРЅ, С‚Рѕ РµРіРѕ РЅР° СЃРІРѕСЋ СЃС‚СЂР°РЅРёС†Сѓ
     if session['username'] != 'admin':
-        flash('Доступ запрещен')
+        flash('Р”РѕСЃС‚СѓРї Р·Р°РїСЂРµС‰РµРЅ')
         redirect('index')
-    # если обычный пользователь, то его на свою
+    # РµСЃР»Рё РѕР±С‹С‡РЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ, С‚Рѕ РµРіРѕ РЅР° СЃРІРѕСЋ
     cars = CarsModel(db.get_connection()).get_all()
     return render_template('car_admin.html',
                            username=session['username'],
-                           title='Просмотр автомобилей',
+                           title='РџСЂРѕСЃРјРѕС‚СЂ Р°РІС‚РѕРјРѕР±РёР»РµР№',
                            cars=cars)
 
 
 @app.route('/add_car', methods=['GET', 'POST'])
 def add_car():
     """
-    Добавление автомобиля
+    Р”РѕР±Р°РІР»РµРЅРёРµ Р°РІС‚РѕРјРѕР±РёР»СЏ
     """
-    # если пользователь не авторизован, кидаем его на страницу входа
+    # РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, РєРёРґР°РµРј РµРіРѕ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РІС…РѕРґР°
     if 'username' not in session:
         return redirect('login')
-    # если админ, то его на свою страницу
+    # РµСЃР»Рё Р°РґРјРёРЅ, С‚Рѕ РµРіРѕ РЅР° СЃРІРѕСЋ СЃС‚СЂР°РЅРёС†Сѓ
     if session['username'] != 'admin':
         return redirect('index')
     form = AddCarForm()
     available_dealers = [(i[0], i[1]) for i in DealersModel(db.get_connection()).get_all()]
     form.dealer_id.choices = available_dealers
     if form.validate_on_submit():
-        # создать автомобиль
+        # СЃРѕР·РґР°С‚СЊ Р°РІС‚РѕРјРѕР±РёР»СЊ
         cars = CarsModel(db.get_connection())
         cars.insert(model=form.model.data,
                     price=form.price.data,
                     power=form.power.data,
                     color=form.color.data,
                     dealer=form.dealer_id.data)
-        # редирект на главную страницу
+        # СЂРµРґРёСЂРµРєС‚ РЅР° РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
         return redirect(url_for('car_admin'))
-    return render_template("add_car.html", title='Добавление автомобиля', form=form)
+    return render_template("add_car.html", title='Р”РѕР±Р°РІР»РµРЅРёРµ Р°РІС‚РѕРјРѕР±РёР»СЏ', form=form)
 
 
 @app.route('/car/<int:car_id>', methods=['GET'])
 def car(car_id):
     """
-    Вывод всей информации об автомобиле
+    Р’С‹РІРѕРґ РІСЃРµР№ РёРЅС„РѕСЂРјР°С†РёРё РѕР± Р°РІС‚РѕРјРѕР±РёР»Рµ
     :return:
-    информация для авторизованного пользователя
+    РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     """
-    # если пользователь не авторизован, кидаем его на страницу входа
+    # РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, РєРёРґР°РµРј РµРіРѕ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РІС…РѕРґР°
     if 'username' not in session:
         return redirect('/login')
-    # если не админ, то его на главную страницу
+    # РµСЃР»Рё РЅРµ Р°РґРјРёРЅ, С‚Рѕ РµРіРѕ РЅР° РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
     '''if session['username'] != 'admin':
         return redirect(url_for('index'))'''
-    # иначе выдаем информацию
+    # РёРЅР°С‡Рµ РІС‹РґР°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ
     car = CarsModel(db.get_connection()).get(car_id)
     dealer = DealersModel(db.get_connection()).get(car[5])
     return render_template('car_info.html',
                            username=session['username'],
-                           title='Просмотр автомобиля',
+                           title='РџСЂРѕСЃРјРѕС‚СЂ Р°РІС‚РѕРјРѕР±РёР»СЏ',
                            car=car,
                            dealer=dealer[1])
 
@@ -159,21 +161,21 @@ def car(car_id):
 @app.route('/search_price', methods=['GET', 'POST'])
 def search_price():
     """
-    Запрос автомобилей, удовлетворяющих определенной цене
+    Р—Р°РїСЂРѕСЃ Р°РІС‚РѕРјРѕР±РёР»РµР№, СѓРґРѕРІР»РµС‚РІРѕСЂСЏСЋС‰РёС… РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ С†РµРЅРµ
     """
     form = SearchPriceForm()
     if form.validate_on_submit():
-        # получить все машины по определенной цене
+        # РїРѕР»СѓС‡РёС‚СЊ РІСЃРµ РјР°С€РёРЅС‹ РїРѕ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ С†РµРЅРµ
         cars = CarsModel(db.get_connection()).get_by_price(form.start_price.data, form.end_price.data)
-        # редирект на страницу с результатами
-        return render_template('car_user.html', username=session['username'], title='Просмотр базы', cars=cars)
-    return render_template("search_price.html", title='Подбор по цене', form=form)
+        # СЂРµРґРёСЂРµРєС‚ РЅР° СЃС‚СЂР°РЅРёС†Сѓ СЃ СЂРµР·СѓР»СЊС‚Р°С‚Р°РјРё
+        return render_template('car_user.html', username=session['username'], title='РџСЂРѕСЃРјРѕС‚СЂ Р±Р°Р·С‹', cars=cars)
+    return render_template("search_price.html", title='РџРѕРґР±РѕСЂ РїРѕ С†РµРЅРµ', form=form)
 
 
 @app.route('/search_dealer', methods=['GET', 'POST'])
 def search_dealer():
     """
-    Запрос автомобилей, продающихся в определенном дилерском центре
+    Р—Р°РїСЂРѕСЃ Р°РІС‚РѕРјРѕР±РёР»РµР№, РїСЂРѕРґР°СЋС‰РёС…СЃСЏ РІ РѕРїСЂРµРґРµР»РµРЅРЅРѕРј РґРёР»РµСЂСЃРєРѕРј С†РµРЅС‚СЂРµ
     """
     form = SearchDealerForm()
     available_dealers = [(i[0], i[1]) for i in DealersModel(db.get_connection()).get_all()]
@@ -181,75 +183,75 @@ def search_dealer():
     if form.validate_on_submit():
         #
         cars = CarsModel(db.get_connection()).get_by_dealer(form.dealer_id.data)
-        # редирект на главную страницу
-        return render_template('car_user.html', username=session['username'], title='Просмотр базы', cars=cars)
-    return render_template("search_dealer.html", title='Подбор по цене', form=form)
+        # СЂРµРґРёСЂРµРєС‚ РЅР° РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
+        return render_template('car_user.html', username=session['username'], title='РџСЂРѕСЃРјРѕС‚СЂ Р±Р°Р·С‹', cars=cars)
+    return render_template("search_dealer.html", title='РџРѕРґР±РѕСЂ РїРѕ С†РµРЅРµ', form=form)
 
 
-'''Работа с дилерским центром'''
+'''Р Р°Р±РѕС‚Р° СЃ РґРёР»РµСЂСЃРєРёРј С†РµРЅС‚СЂРѕРј'''
 
 
 @app.route('/dealer_admin', methods=['GET'])
 def dealer_admin():
     """
-    Вывод всей информации об всех дилерских центрах
+    Р’С‹РІРѕРґ РІСЃРµР№ РёРЅС„РѕСЂРјР°С†РёРё РѕР± РІСЃРµС… РґРёР»РµСЂСЃРєРёС… С†РµРЅС‚СЂР°С…
     :return:
-    информация для авторизованного пользователя
+    РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     """
-    # если пользователь не авторизован, кидаем его на страницу входа
+    # РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, РєРёРґР°РµРј РµРіРѕ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РІС…РѕРґР°
     if 'username' not in session:
         return redirect('/login')
-    # если админ, то его на свою страницу
+    # РµСЃР»Рё Р°РґРјРёРЅ, С‚Рѕ РµРіРѕ РЅР° СЃРІРѕСЋ СЃС‚СЂР°РЅРёС†Сѓ
     if session['username'] != 'admin':
-        flash('Доступ запрещен')
+        flash('Р”РѕСЃС‚СѓРї Р·Р°РїСЂРµС‰РµРЅ')
         redirect('index')
-    # иначе это админ
+    # РёРЅР°С‡Рµ СЌС‚Рѕ Р°РґРјРёРЅ
     dealers = DealersModel(db.get_connection()).get_all()
     return render_template('dealer_admin.html',
                            username=session['username'],
-                           title='Просмотр Дилерских центров',
+                           title='РџСЂРѕСЃРјРѕС‚СЂ Р”РёР»РµСЂСЃРєРёС… С†РµРЅС‚СЂРѕРІ',
                            dealers=dealers)
 
 
 @app.route('/dealer/<int:dealer_id>', methods=['GET'])
 def dealer(dealer_id):
     """
-    Вывод всей информации о дилерском центре
+    Р’С‹РІРѕРґ РІСЃРµР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РґРёР»РµСЂСЃРєРѕРј С†РµРЅС‚СЂРµ
     :return:
-    информация для авторизованного пользователя
+    РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     """
-    # если пользователь не авторизован, кидаем его на страницу входа
+    # РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, РєРёРґР°РµРј РµРіРѕ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РІС…РѕРґР°
     if 'username' not in session:
         return redirect('/login')
-    # если не админ, то его на главную страницу
+    # РµСЃР»Рё РЅРµ Р°РґРјРёРЅ, С‚Рѕ РµРіРѕ РЅР° РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
     if session['username'] != 'admin':
         return redirect(url_for('index'))
-    # иначе выдаем информацию
+    # РёРЅР°С‡Рµ РІС‹РґР°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ
     dealer = DealersModel(db.get_connection()).get(dealer_id)
     return render_template('dealer_info.html',
                            username=session['username'],
-                           title='Просмотр информации о дилерском центре',
+                           title='РџСЂРѕСЃРјРѕС‚СЂ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РґРёР»РµСЂСЃРєРѕРј С†РµРЅС‚СЂРµ',
                            dealer=dealer)
 
 
 @app.route('/add_dealer', methods=['GET', 'POST'])
 def add_dealer():
     """
-    Добавление дилерского центра и вывод на экран информации о нем
+    Р”РѕР±Р°РІР»РµРЅРёРµ РґРёР»РµСЂСЃРєРѕРіРѕ С†РµРЅС‚СЂР° Рё РІС‹РІРѕРґ РЅР° СЌРєСЂР°РЅ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РЅРµРј
     """
-    # если пользователь не авторизован, кидаем его на страницу входа
+    # РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, РєРёРґР°РµРј РµРіРѕ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РІС…РѕРґР°
     if 'username' not in session:
         return redirect('/login')
-    # если админ, то его на свою страницу
+    # РµСЃР»Рё Р°РґРјРёРЅ, С‚Рѕ РµРіРѕ РЅР° СЃРІРѕСЋ СЃС‚СЂР°РЅРёС†Сѓ
     if session['username'] == 'admin':
         form = AddDealerForm()
         if form.validate_on_submit():
-            # создать дилера
+            # СЃРѕР·РґР°С‚СЊ РґРёР»РµСЂР°
             dealers = DealersModel(db.get_connection())
             dealers.insert(name=form.name.data, address=form.address.data)
-            # редирект на главную страницу
+            # СЂРµРґРёСЂРµРєС‚ РЅР° РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
             return redirect(url_for('index'))
-        return render_template("add_dealer.html", title='Добавление дилерского центра', form=form)
+        return render_template("add_dealer.html", title='Р”РѕР±Р°РІР»РµРЅРёРµ РґРёР»РµСЂСЃРєРѕРіРѕ С†РµРЅС‚СЂР°', form=form)
 
 
 if __name__ == '__main__':
