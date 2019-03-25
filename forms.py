@@ -4,48 +4,48 @@ from wtforms.validators import DataRequired, Email
 
 
 class LoginForm(FlaskForm):
-    """Р¤РѕСЂРјР° Р°РІС‚РѕСЂРёР·Р°С†РёРё"""
-    username = StringField('Р›РѕРіРёРЅ', validators=[DataRequired()])
-    password = PasswordField('РџР°СЂРѕР»СЊ', validators=[DataRequired()])
-    remember_me = BooleanField('Р—Р°РїРѕРјРЅРёС‚СЊ РјРµРЅСЏ')
-    submit = SubmitField('Р’РѕР№С‚Рё')
+    """Форма авторизации"""
+    username = StringField('Логин', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    remember_me = BooleanField('Запомнить меня')
+    submit = SubmitField('Войти')
 
 
 class RegisterForm(FlaskForm):
-    """Р¤РѕСЂРјР° СЂРµРіРёСЃС‚СЂР°С†РёРё"""
-    user_name = StringField('РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ', validators=[DataRequired()])
-    email = StringField('Email Р°РґСЂРµСЃ', validators=[DataRequired(), Email()])
-    password_hash = PasswordField('РџР°СЂРѕР»СЊ', validators=[DataRequired()])
-    confirm = PasswordField('РџРѕРІС‚РѕСЂРёС‚Рµ РїР°СЂРѕР»СЊ', validators=[DataRequired()])
-    accept_tos = BooleanField('РЇ РїСЂРёРЅРёРјР°СЋ Р»РёС†РµРЅР·РёРѕРЅРЅРѕРµ СЃРѕРіР»Р°С€РµРЅРёРµ', validators=[DataRequired()])
-    submit = SubmitField('РЎРѕР·РґР°С‚СЊ СѓС‡РµС‚РЅСѓСЋ Р·Р°РїРёСЃСЊ')
+    """Форма регистрации"""
+    user_name = StringField('Имя пользователя', validators=[DataRequired()])
+    email = StringField('Email адрес', validators=[DataRequired(), Email()])
+    password_hash = PasswordField('Пароль', validators=[DataRequired()])
+    confirm = PasswordField('Повторите пароль', validators=[DataRequired()])
+    accept_tos = BooleanField('Я принимаю лицензионное соглашение', validators=[DataRequired()])
+    submit = SubmitField('Создать учетную запись')
 
 
 class AddCarForm(FlaskForm):
-    """Р¤РѕСЂРјР° РґРѕР±Р°РІР»РµРЅРёСЏ Р°РІС‚РѕРјРѕР±РёР»СЏ"""
-    model = StringField('РњРѕРґРµР»СЊ', validators=[DataRequired()])
-    price = IntegerField('Р¦РµРЅР°', validators=[DataRequired()])
-    power = IntegerField('РњРѕС‰РЅРѕСЃС‚СЊ (Р».СЃ.)', validators=[DataRequired()])
-    color = StringField('Р¦РІРµС‚', validators=[DataRequired()])
-    dealer_id = SelectField('РќРѕРјРµСЂ РґРёР»РµСЂСЃРєРѕРіРѕ С†РµРЅС‚СЂР°', coerce=int, validators=[DataRequired()])
-    submit = SubmitField('Р”РѕР±Р°РІРёС‚СЊ Р°РІС‚РѕРјРѕР±РёР»СЊ')
+    """Форма добавления автомобиля"""
+    model = StringField('Модель', validators=[DataRequired()])
+    price = IntegerField('Цена', validators=[DataRequired()])
+    power = IntegerField('Мощность (л.с.)', validators=[DataRequired()])
+    color = StringField('Цвет', validators=[DataRequired()])
+    dealer_id = SelectField('Номер дилерского центра', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Добавить автомобиль')
 
 
 class AddDealerForm(FlaskForm):
-    """Р”РѕР±Р°РІР»РµРЅРёРµ РґРёР»РµСЂСЃРєРѕРіРѕ С†РµРЅС‚СЂР°"""
-    name = StringField('РќР°Р·РІР°РЅРёРµ', validators=[DataRequired()])
-    address = StringField('РђРґСЂРµСЃ', validators=[DataRequired()])
-    submit = SubmitField('Р”РѕР±Р°РІРёС‚СЊ РґРёР»РµСЂСЃРєРёР№ С†РµРЅС‚СЂ')
+    """Добавление дилерского центра"""
+    name = StringField('Название', validators=[DataRequired()])
+    address = StringField('Адрес', validators=[DataRequired()])
+    submit = SubmitField('Добавить дилерский центр')
 
 
 class SearchPriceForm(FlaskForm):
-    """Р¤РѕСЂРјР° РїРѕРёСЃРєР° РїРѕ С†РµРЅРµ"""
-    start_price = IntegerField('РњРёРЅРёРјР°Р»СЊРЅР°СЏ С†РµРЅР°', validators=[DataRequired()], default=500000)
-    end_price = IntegerField('РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ С†РµРЅР°', validators=[DataRequired()], default=1000000)
-    submit = SubmitField('РџРѕРёСЃРє')
+    """Форма поиска по цене"""
+    start_price = IntegerField('Минимальная цена', validators=[DataRequired()], default=500000)
+    end_price = IntegerField('Максимальная цена', validators=[DataRequired()], default=1000000)
+    submit = SubmitField('Поиск')
 
 
 class SearchDealerForm(FlaskForm):
-    """Р¤РѕСЂРјР° РїРѕРёСЃРєР° РїРѕ РґРёР»РµСЂСЃРєРѕРјСѓ С†РµРЅС‚СЂСѓ"""
-    dealer_id = SelectField('РќРѕРјРµСЂ РґРёР»РµСЂСЃРєРѕРіРѕ С†РµРЅС‚СЂР°', coerce=int, validators=[DataRequired()])
-    submit = SubmitField('РџРѕРёСЃРє')
+    """Форма поиска по дилерскому центру"""
+    dealer_id = SelectField('Номер дилерского центра', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Поиск')
