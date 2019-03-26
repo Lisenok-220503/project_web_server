@@ -1,12 +1,10 @@
-# coding: utf8
-
 class UsersModel:
-    """Ð¡ÑƒÑ‰Ð½Ð¾ÑÑ‚ÑŒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹"""
+    """Ñóùíîñòü ïîëüçîâàòåëåé"""
     def __init__(self, connection):
         self.connection = connection
 
     def init_table(self):
-        """Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹"""
+        """Èíèöèàëèçàöèÿ òàáëèöû"""
         cursor = self.connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS users 
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -19,7 +17,7 @@ class UsersModel:
         self.connection.commit()
 
     def insert(self, user_name, password_hash, email, is_admin=False):
-        """Ð’ÑÑ‚Ð°Ð²ÐºÐ° Ð½Ð¾Ð²Ð¾Ð¹ Ð·Ð°Ð¿Ð¸ÑÐ¸"""
+        """Âñòàâêà íîâîé çàïèñè"""
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO users 
                           (user_name, password_hash, email, is_admin) 
@@ -29,21 +27,21 @@ class UsersModel:
         self.connection.commit()
 
     def exists(self, user_name):
-        """ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ°, ÐµÑÑ‚ÑŒ Ð»Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð² ÑÐ¸ÑÑ‚ÐµÐ¼Ðµ"""
+        """Ïðîâåðêà, åñòü ëè ïîëüçîâàòåëü â ñèñòåìå"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM users WHERE user_name = ?", [user_name])
         row = cursor.fetchone()
         return (True, row[2], row[0]) if row else (False,)
 
     def get(self, user_id):
-        """Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ Ð¿Ð¾ id"""
+        """Âîçâðàò ïîëüçîâàòåëÿ ïî id"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM users WHERE id = ?", (str(user_id)))
         row = cursor.fetchone()
         return row
 
     def get_all(self):
-        """Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð²ÑÐµÑ… Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹"""
+        """Çàïðîñ âñåõ ïîëüçîâàòåëåé"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM users")
         rows = cursor.fetchall()
@@ -51,12 +49,12 @@ class UsersModel:
 
 
 class DealersModel:
-    """Ð¡ÑƒÑ‰Ð½Ð¾ÑÑ‚ÑŒ Ð´Ð¸Ð»ÐµÑ€ÑÐºÐ¸Ñ… Ñ†ÐµÐ½Ñ‚Ñ€Ð¾Ð²"""
+    """Ñóùíîñòü äèëåðñêèõ öåíòðîâ"""
     def __init__(self, connection):
         self.connection = connection
 
     def init_table(self):
-        """Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹"""
+        """Èíèöèàëèçàöèÿ òàáëèöû"""
         cursor = self.connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS dealers 
                             (dealer_id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -67,7 +65,7 @@ class DealersModel:
         self.connection.commit()
 
     def insert(self, name, address):
-        """Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð´Ð¸Ð»ÐµÑ€ÑÐºÐ¾Ð³Ð¾ Ñ†ÐµÐ½Ñ‚Ñ€Ð°"""
+        """Äîáàâëåíèå äèëåðñêîãî öåíòðà"""
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO dealers 
                           (name, address) 
@@ -77,7 +75,7 @@ class DealersModel:
         self.connection.commit()
 
     def exists(self, name):
-        """ÐŸÐ¾Ð¸ÑÐº Ð´Ð¸Ð»ÐµÑ€ÑÐºÐ¾Ð³Ð¾ Ñ†ÐµÐ½Ñ‚Ñ€Ð° Ð¿Ð¾ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸ÑŽ"""
+        """Ïîèñê äèëåðñêîãî öåíòðà ïî íàçâàíèþ"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM dealers WHERE name = ?",
                        name)
@@ -85,21 +83,21 @@ class DealersModel:
         return (True, row[0]) if row else (False,)
 
     def get(self, dealer_id):
-        """Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð´Ð¸Ð»ÐµÑ€ÑÐºÐ¾Ð³Ð¾ Ñ†ÐµÐ½Ñ‚Ñ€Ð° Ð¿Ð¾ id"""
+        """Çàïðîñ äèëåðñêîãî öåíòðà ïî id"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM dealers WHERE dealer_id = ?", (str(dealer_id)))
         row = cursor.fetchone()
         return row
 
     def get_all(self):
-        """Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð²ÑÐµÑ… Ð´Ð¸Ð»ÐµÑ€ÑÐºÐ¸Ñ… Ñ†ÐµÐ½Ñ‚Ñ€Ð¾Ð²"""
+        """Çàïðîñ âñåõ äèëåðñêèõ öåíòðîâ"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM dealers")
         rows = cursor.fetchall()
         return rows
 
     def delete(self, dealer_id):
-        """Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð´Ð¸Ð»ÐµÑ€ÑÐºÐ¾Ð³Ð¾ Ñ†ÐµÐ½Ñ‚Ñ€Ð°"""
+        """Óäàëåíèå äèëåðñêîãî öåíòðà"""
         cursor = self.connection.cursor()
         cursor.execute('''DELETE FROM dealers WHERE dealer_id = ?''', (str(dealer_id)))
         cursor.close()
@@ -107,12 +105,12 @@ class DealersModel:
 
 
 class CarsModel:
-    """Ð¡ÑƒÑ‰Ð½Ð¾ÑÑ‚ÑŒ Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÐµÐ¹"""
+    """Ñóùíîñòü àâòîìîáèëåé"""
     def __init__(self, connection):
         self.connection = connection
 
     def init_table(self):
-        """Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹"""
+        """Èíèöèàëèçàöèÿ òàáëèöû"""
         cursor = self.connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS cars 
                             (car_id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -126,7 +124,7 @@ class CarsModel:
         self.connection.commit()
 
     def insert(self, model, price, power, color, dealer):
-        """Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»Ñ"""
+        """Äîáàâëåíèå àâòîìîáèëÿ"""
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO cars 
                           (model, price, power, color, dealer) 
@@ -136,7 +134,7 @@ class CarsModel:
         self.connection.commit()
 
     def exists(self, model):
-        """ÐŸÐ¾Ð¸ÑÐº Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»Ñ Ð¿Ð¾ Ð¼Ð¾Ð´ÐµÐ»Ð¸"""
+        """Ïîèñê àâòîìîáèëÿ ïî ìîäåëè"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM cars WHERE model = ?",
                        model)
@@ -144,35 +142,35 @@ class CarsModel:
         return (True, row[0]) if row else (False,)
 
     def get(self, car_id):
-        """ÐŸÐ¾Ð¸ÑÐº Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»Ñ Ð¿Ð¾ id"""
+        """Ïîèñê àâòîìîáèëÿ ïî id"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM cars WHERE car_id = ?", (str(car_id)))
         row = cursor.fetchone()
         return row
 
     def get_all(self):
-        """Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð²ÑÐµÑ… Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÐµÐ¹"""
+        """Çàïðîñ âñåõ àâòîìîáèëåé"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT model, price, car_id FROM cars")
         rows = cursor.fetchall()
         return rows
 
     def delete(self, car_id):
-        """Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»Ñ"""
+        """Óäàëåíèå àâòîìîáèëÿ"""
         cursor = self.connection.cursor()
         cursor.execute('''DELETE FROM cars WHERE car_id = ?''', (str(car_id)))
         cursor.close()
         self.connection.commit()
 
     def get_by_price(self, start_price, end_price):
-        """Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÐµÐ¹ Ð¿Ð¾ Ñ†ÐµÐ½Ðµ"""
+        """Çàïðîñ àâòîìîáèëåé ïî öåíå"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT model, price, car_id FROM cars WHERE price >= ? AND price <= ?", (str(start_price), str(end_price)))
         row = cursor.fetchall()
         return row
 
     def get_by_dealer(self, dealer_id):
-        """Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÐµÐ¹ Ð¿Ð¾ Ð´Ð¸Ð»ÐµÑ€ÑÐºÐ¾Ð¼Ñƒ Ñ†ÐµÐ½Ñ‚Ñ€Ñƒ"""
+        """Çàïðîñ àâòîìîáèëåé ïî äèëåðñêîìó öåíòðó"""
         cursor = self.connection.cursor()
         cursor.execute("SELECT model, price, car_id FROM cars WHERE dealer = ?", (str(dealer_id)))
         row = cursor.fetchall()
