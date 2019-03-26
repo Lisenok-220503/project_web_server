@@ -2,7 +2,7 @@
 
 from flask import Flask, session, redirect, render_template, flash, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-from sorts import UsersModel, CarsModel, DealersModel
+from models import UsersModel, CarsModel, DealersModel
 from forms import LoginForm, RegisterForm, AddCarForm, SearchPriceForm, SearchDealerForm, AddDealerForm
 from db import DB
 
@@ -104,7 +104,7 @@ def car_admin():
     cars = CarsModel(db.get_connection()).get_all()
     return render_template('car_admin.html',
                            username=session['username'],
-                           title='Просмотр автомобилей',
+                           title='Просмотр яблок',
                            cars=cars)
 
 
@@ -132,7 +132,7 @@ def add_car():
                     dealer=form.dealer_id.data)
         # редирект на главную страницу
         return redirect(url_for('car_admin'))
-    return render_template("add_car.html", title='Добавление автомобиля', form=form)
+    return render_template("add_car.html", title='Добавление яблока', form=form)
 
 
 @app.route('/car/<int:car_id>', methods=['GET'])
@@ -153,7 +153,7 @@ def car(car_id):
     dealer = DealersModel(db.get_connection()).get(car[5])
     return render_template('car_info.html',
                            username=session['username'],
-                           title='Просмотр автомобиля',
+                           title='Просмотр яблока',
                            car=car,
                            dealer=dealer[1])
 
